@@ -1,0 +1,33 @@
+name: Update Forecast Plots
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run forecast generator
+        run: |
+          python fetch_all_and_plot.py
+
+      - name: Commit updated plots
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add static/*.html
+          git commit -m "🔁 Update forecast plots"
+          git push || echo "No changes to commit"

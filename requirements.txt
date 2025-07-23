@@ -1,0 +1,7 @@
+matplotlib
+plotly
+pandas
+requests
+joblib
+numpy
+dash
